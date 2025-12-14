@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Equipo - Task System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-body">
+                <h2 class="card-title text-danger mb-4">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Eliminar Equipo
+                </h2>
+                
+                <div class="alert alert-warning">
+                    <strong>¡Advertencia!</strong> Esta acción no se puede deshacer.
+                </div>
+                
+                <p class="mb-4">
+                    ¿Estás seguro de que deseas eliminar el equipo <strong>"{{ team.name }}"</strong>?
+                </p>
+                
+                {% if team.tasks.count > 0 %}
+                <div class="alert alert-danger">
+                    <strong>Este equipo tiene {{ team.tasks.count }} tarea(s) asignada(s)</strong> que también serán eliminadas.
+                </div>
+                {% endif %}
+                
+                {% if team.members.count > 0 %}
+                <div class="alert alert-info">
+                    <strong>Miembros del equipo:</strong>
+                    <ul class="mb-0 mt-2">
+                        {% for member in team.members.all %}
+                        <li>{{ member.name }} ({{ member.get_role_display }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Sí, Eliminar Equipo
+                        </button>
+                        <a href="{% url 'team-detail' team.pk %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

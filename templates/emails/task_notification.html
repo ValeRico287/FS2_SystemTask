@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject }}</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px;">
+        <tr>
+            <td align="center">
+                <!-- Container -->
+                <table width="600" cellpadding="0" cellspacing="0" style="background: #ffffff; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                SystemTask
+                            </h1>
+                            <p style="margin: 10px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px; letter-spacing: 1px;">
+                                GESTIÓN DE TAREAS COLABORATIVAS
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Notification Badge -->
+                    <tr>
+                        <td style="padding: 30px 30px 20px 30px; text-align: center;">
+                            <div style="display: inline-block; background: {{ badge_color }}; color: white; padding: 12px 24px; border-radius: 25px; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px {{ badge_color }}40;">
+                                {{ notification_type_display }}
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 20px 40px;">
+                            <h2 style="color: #2d3748; font-size: 24px; margin: 0 0 20px 0; font-weight: 600;">
+                                Hola, {{ user_name }}
+                            </h2>
+                            
+                            <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin: 0 0 25px 0;">
+                                {{ message }}
+                            </p>
+                            
+                            <!-- Task Card -->
+                            <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%); border-radius: 12px; border-left: 5px solid {{ priority_color }}; margin: 25px 0;">
+                                <tr>
+                                    <td style="padding: 25px;">
+                                        <h3 style="margin: 0 0 15px 0; color: #2d3748; font-size: 20px; font-weight: 600;">
+                                            {{ task_title }}
+                                        </h3>
+                                        
+                                        {% if task_description %}
+                                        <p style="color: #4a5568; font-size: 14px; line-height: 1.5; margin: 0 0 20px 0; padding: 15px; background: white; border-radius: 8px;">
+                                            {{ task_description }}
+                                        </p>
+                                        {% endif %}
+                                        
+                                        <!-- Task Details Grid -->
+                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td width="50%" style="padding: 10px 10px 10px 0;">
+                                                    <div style="background: white; padding: 12px; border-radius: 8px;">
+                                                        <div style="color: #718096; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px;">Prioridad</div>
+                                                        <div style="color: {{ priority_color }}; font-weight: 600; font-size: 14px;">{{ task_priority }}</div>
+                                                    </div>
+                                                </td>
+                                                <td width="50%" style="padding: 10px 0 10px 10px;">
+                                                    <div style="background: white; padding: 12px; border-radius: 8px;">
+                                                        <div style="color: #718096; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px;">Vencimiento</div>
+                                                        <div style="color: #2d3748; font-weight: 600; font-size: 14px;">{{ task_due_date }}</div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="padding: 10px 0 0 0;">
+                                                    <div style="background: white; padding: 12px; border-radius: 8px;">
+                                                        <div style="color: #718096; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px;">Equipo</div>
+                                                        <div style="color: #2d3748; font-weight: 600; font-size: 14px;">{{ task_team }}</div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        
+                                        <!-- UUID -->
+                                        <div style="margin-top: 15px; padding: 10px; background: white; border-radius: 8px; font-family: 'Courier New', monospace;">
+                                            <div style="color: #718096; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px;">ID de Tarea (UUID)</div>
+                                            <div style="color: #4a5568; font-size: 11px; word-break: break-all;">{{ task_uuid }}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- CTA Button -->
+                            <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0 20px 0;">
+                                <tr>
+                                    <td align="center">
+                                        <a href="http://129.80.43.84:8000/dashboard/mis-tareas/" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; padding: 16px 40px; border-radius: 30px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); transition: all 0.3s;">
+                                            Ver Tus Tareas
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background: #f7fafc; padding: 30px; text-align: center; border-top: 1px solid #e2e8f0;">
+                            <p style="margin: 0 0 10px 0; color: #718096; font-size: 13px;">
+                                Este es un correo automático de <strong style="color: #667eea;">SystemTask</strong>
+                            </p>
+                            <p style="margin: 0; color: #a0aec0; font-size: 12px;">
+                                No respondas a este correo. Para más información, inicia sesión en el sistema.
+                            </p>
+                            <div style="margin-top: 20px;">
+                                <p style="margin: 0; color: #cbd5e0; font-size: 11px;">
+                                    © 2025 SystemTask. Todos los derechos reservados.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

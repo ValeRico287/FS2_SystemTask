@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Tareas - Task System{% endblock %}
+
+{% block content %}
+
+<div class="my-tasks-header">
+    <h2><i class="bi bi-check-circle"></i> Mis Tareas</h2>
+    <a href="{% url 'task-create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Nueva Tarea
+    </a>
+</div>
+
+<!-- Stats Section -->
+<div class="stats-container">
+    <div class="stat-card todo">
+        <div class="stat-number">{{ todo_tasks }}</div>
+        <div class="stat-label">Por Hacer</div>
+    </div>
+    <div class="stat-card in-progress">
+        <div class="stat-number">{{ in_progress_tasks }}</div>
+        <div class="stat-label">En Progreso</div>
+    </div>
+    <div class="stat-card review">
+        <div class="stat-number">{{ review_tasks }}</div>
+        <div class="stat-label">En Revisión</div>
+    </div>
+    <div class="stat-card done">
+        <div class="stat-number">{{ done_tasks }}</div>
+        <div class="stat-label">Completadas</div>
+    </div>
+    <div class="stat-card" style="border-left-color: #6f42c1;">
+        <div class="stat-number" style="color: #6f42c1;">{{ total_tasks }}</div>
+        <div class="stat-label">Total</div>
+    </div>
+</div>
+
+<!-- Tasks Table -->
+{% if tasks %}
+<div class="tasks-table">
+    <div class="table-header">
+        <div>Tarea</div>
+        <div>Equipo</div>
+        <div>Estado</div>
+        <div>Prioridad</div>
+        <div>Fecha Límite</div>
+        <div>Acciones</div>
+    </div>
+    
+    {% for task in tasks %}
+    <div class="task-row">
+        <div>
+            <a href="{% url 'task-detail' task.pk %}" style="text-decoration: none; color: inherit;">
+                <div class="task-title">{{ task.title }}</div>
+            </a>
+        </div>
+        <div>
+            <span class="task-team">{{ task.team.name }}</span>
+        </div>
+        <div>
+            <span class="status-badge status-{{ task.status }}">
+                {{ task.get_status_display }}
+            </span>
+        </div>
+        <div>
+            <span class="priority-badge priority-{{ task.priority }}">
+                {{ task.get_priority_display }}
+            </span>
+        </div>
+        <div>
+            {% if task.due_date %}
+                {{ task.due_date|date:"d/m/Y H:i" }}
+            {% else %}
+                <span class="text-muted">—</span>
+            {% endif %}
+        </div>
+        <div class="task-actions">
+            <a href="{% url 'task-detail' task.pk %}" class="btn btn-sm btn-outline-primary" title="Ver">
+                <i class="bi bi-eye"></i>
+            </a>
+            <a href="{% url 'task-update' task.pk %}" class="btn btn-sm btn-outline-warning" title="Editar">
+                <i class="bi bi-pencil"></i>
+            </a>
+            <a href="{% url 'task-delete' task.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                <i class="bi bi-trash"></i>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<nav aria-label="Page navigation" class="pagination">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">Primera</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            </li>
+        {% endif %}
+        
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Última</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% else %}
+<div class="tasks-table">
+    <div class="empty-state">
+        <div class="empty-icon">
+            <i class="bi bi-inbox"></i>
+        </div>
+        <div class="empty-text">No tienes tareas asignadas</div>
+        <a href="{% url 'task-create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Crear Primera Tarea
+        </a>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

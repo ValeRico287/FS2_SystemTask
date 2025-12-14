@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Actualizar Estado de Tarea</h2>
+    
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ task.title }}</h5>
+            <p class="card-text">{{ task.description }}</p>
+            <p><strong>Estado actual:</strong> 
+                <span class="badge 
+                    {% if task.status == 'to_do' %}bg-secondary
+                    {% elif task.status == 'in_progress' %}bg-primary
+                    {% elif task.status == 'review' %}bg-warning
+                    {% else %}bg-success{% endif %}">
+                    {{ task.get_status_display }}
+                </span>
+            </p>
+        </div>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="status" class="form-label">Nuevo Estado</label>
+            <select name="status" id="status" class="form-control" required>
+                {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if task.status == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Actualizar Estado</button>
+        <a href="{% url 'task-detail' task.pk %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

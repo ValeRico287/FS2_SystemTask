@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Agregar Miembro al Equipo: {{ team.name }}</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="user_id" class="form-label">Seleccionar Usuario</label>
+            <select name="user_id" id="user_id" class="form-control" required>
+                <option value="">--- Seleccionar ---</option>
+                {% for user in available_users %}
+                    <option value="{{ user.id }}">
+                        {{ user.name }} ({{ user.email }}) - {{ user.get_role_display }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Agregar Miembro</button>
+        <a href="{% url 'team-detail' team.pk %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

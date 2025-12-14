@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Asignar Líder de Equipo: {{ team.name }}</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="team_lead_id" class="form-label">Seleccionar Líder</label>
+            <select name="team_lead_id" id="team_lead_id" class="form-control" required>
+                <option value="">--- Seleccionar ---</option>
+                {% for user in team_leads %}
+                    <option value="{{ user.id }}" {% if team.team_lead.id == user.id %}selected{% endif %}>
+                        {{ user.name }} ({{ user.email }})
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Asignar Líder</button>
+        <a href="{% url 'team-detail' team.pk %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

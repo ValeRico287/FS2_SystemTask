@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Tarea - Task System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h2>{{ task.title }}</h2>
+                <p class="text-muted">Equipo: <strong>{{ task.team.name }}</strong></p>
+                
+                <div class="mb-3">
+                    <h5>Descripción</h5>
+                    <p>{{ task.description }}</p>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Estado:</strong> 
+                            <span class="badge 
+                                {% if task.status == 'to_do' %}bg-secondary
+                                {% elif task.status == 'in_progress' %}bg-primary
+                                {% elif task.status == 'review' %}bg-warning
+                                {% else %}bg-success{% endif %}">
+                                {{ task.get_status_display }}
+                            </span>
+                        </p>
+                        <p><strong>Prioridad:</strong> 
+                            <span class="badge 
+                                {% if task.priority == 'urgent' %}bg-danger
+                                {% elif task.priority == 'high' %}bg-warning
+                                {% elif task.priority == 'medium' %}bg-info
+                                {% else %}bg-secondary{% endif %}">
+                                {{ task.get_priority_display }}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Asignada a:</strong> 
+                            {% for user in task.assigned_to.all %}
+                                <span class="badge bg-info">{{ user.name }}</span>
+                            {% empty %}
+                                <span class="text-muted">No asignada</span>
+                            {% endfor %}
+                        </p>
+                        <p><strong>Fecha límite:</strong> {{ task.due_date|date:"d/m/Y H:i"|default:"Sin fecha" }}</p>
+                        <p><strong>Creada por:</strong> {{ task.created_by.name }}</p>
+                    </div>
+                </div>
+
+                <div class="btn-group" role="group">
+                    {% if can_change_status %}
+                    <a href="{% url 'update-task-status' task.pk %}" class="btn btn-primary">
+                        <i class="bi bi-pencil-square"></i> Cambiar Estado
+                    </a>
+                    {% endif %}
+                    
+                    {% if can_edit %}
+                    <a href="{% url 'task-update' task.pk %}" class="btn btn-warning">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <a href="{% url 'task-delete' task.pk %}" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </a>
+                    {% endif %}
+                    
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Volver</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5>Comentarios</h5>
+                {% if comments %}
+                    {% for comment in comments %}
+                    <div class="comment mb-3 p-2 border-start border-3 border-primary">
+                        <p class="mb-1"><strong>{{ comment.user.name }}</strong> 
+                            <small class="text-muted">{{ comment.created_at|date:"d/m/Y H:i" }}</small>
+                        </p>
+                        <p class="mb-0">{{ comment.content }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <p class="text-muted">No hay comentarios</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Task System{% endblock %}
+
+{% block content %}
+
+
+
+<div class="dashboard-wrapper">
+    <!-- SIDEBAR IZQUIERDO -->
+    <div class="sidebar">
+        <div class="card">
+            <div class="card-body p-2">
+                <h6 class="mb-2" style="font-size: 0.8rem; margin: 0;"><i class="bi bi-people"></i> Equipos</h6>
+                {% if my_teams %}
+                <div class="list-group list-group-sm">
+                    {% for team in my_teams %}
+                    <a href="{% url 'team-detail' team.pk %}" class="list-group-item list-group-item-action" style="font-size: 0.75rem; padding: 0.3rem 0.5rem; border: none;">
+                        <strong>{{ team.name|truncatechars:12 }}</strong><br>
+                        <small><i class="bi bi-people"></i> {{ team.members.count }}</small>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <small class="text-muted d-block text-center py-2">No hay equipos</small>
+                {% endif %}
+                <a href="{% url 'team-create' %}" class="btn btn-sm btn-primary w-100 mt-2" style="font-size: 0.7rem;">Crear</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-area">
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2> Dashboard de Tareas</h2>
+    <a href="{% url 'task-create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Nueva Tarea
+    </a>
+</div>
+
+<!-- Stats Section -->
+<div class="stats-container">
+    <div class="stat-card">
+        <div class="stat-number">{{ todo_count }}</div>
+        <div class="stat-label">Por Hacer</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ in_progress_count }}</div>
+        <div class="stat-label">En Progreso</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ review_count }}</div>
+        <div class="stat-label">En Revisión</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ done_count }}</div>
+        <div class="stat-label">Completadas</div>
+    </div>
+</div>
+
+<!-- Kanban Board -->
+<div class="kanban-board">
+    <!-- TO-DO Column -->
+    <div class="kanban-column">
+        <div class="kanban-header">
+            <h5>Por Hacer</h5>
+            <span class="task-count">{{ todo_count }}</span>
+        </div>
+        <div class="tasks-list">
+            {% if to_do_tasks %}
+                {% for task in to_do_tasks %}
+                <a href="{% url 'task-detail' task.pk %}" class="task-card">
+                    <div class="task-title">{{ task.title }}</div>
+                    <div class="task-meta">
+                        <span class="task-team">{{ task.team.name }}</span>
+                        <span class="task-priority priority-{{ task.priority }}">
+                            {{ task.get_priority_display }}
+                        </span>
+                    </div>
+                    <div class="task-footer">
+                        {% if task.assigned_to.all %}
+                            {% for user in task.assigned_to.all|slice:":2" %}
+                            <div class="avatar" title="{{ user.name }}">
+                                {{ user.name|first|upper }}
+                            </div>
+                            {% endfor %}
+                            {% if task.assigned_to.count > 2 %}
+                            <div class="avatar" title="{{ task.assigned_to.count|add:'-2' }} más">
+                                +{{ task.assigned_to.count|add:'-2' }}
+                            </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="avatar" style="background: #6c757d;" title="Sin asignar">
+                                —
+                            </div>
+                        {% endif %}
+                        <div class="task-actions">
+                            <a href="{% url 'task-update' task.pk %}" class="btn btn-sm btn-outline-warning" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'task-delete' task.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <div class="empty-column">
+                    <div class="empty-icon">✓</div>
+                    <p>No hay tareas por hacer</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- IN PROGRESS Column -->
+    <div class="kanban-column">
+        <div class="kanban-header">
+            <h5>En Progreso</h5>
+            <span class="task-count">{{ in_progress_count }}</span>
+        </div>
+        <div class="tasks-list">
+            {% if in_progress_tasks %}
+                {% for task in in_progress_tasks %}
+                <a href="{% url 'task-detail' task.pk %}" class="task-card">
+                    <div class="task-title">{{ task.title }}</div>
+                    <div class="task-meta">
+                        <span class="task-team">{{ task.team.name }}</span>
+                        <span class="task-priority priority-{{ task.priority }}">
+                            {{ task.get_priority_display }}
+                        </span>
+                    </div>
+                    <div class="task-footer">
+                        {% if task.assigned_to %}
+                            <div class="avatar" title="{{ task.assigned_to.username }}">
+                                {{ task.assigned_to.username|first|upper }}
+                            </div>
+                        {% else %}
+                            <div class="avatar" style="background: #6c757d;" title="Sin asignar">
+                                —
+                            </div>
+                        {% endif %}
+                        <div class="task-actions">
+                            <a href="{% url 'task-update' task.pk %}" class="btn btn-sm btn-outline-warning" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'task-delete' task.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <div class="empty-column">
+                    <div class="empty-icon">✓</div>
+                    <p>No hay tareas en progreso</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- REVIEW Column -->
+    <div class="kanban-column">
+        <div class="kanban-header">
+            <h5>En Revisión</h5>
+            <span class="task-count">{{ review_count }}</span>
+        </div>
+        <div class="tasks-list">
+            {% if review_tasks %}
+                {% for task in review_tasks %}
+                <a href="{% url 'task-detail' task.pk %}" class="task-card">
+                    <div class="task-title">{{ task.title }}</div>
+                    <div class="task-meta">
+                        <span class="task-team">{{ task.team.name }}</span>
+                        <span class="task-priority priority-{{ task.priority }}">
+                            {{ task.get_priority_display }}
+                        </span>
+                    </div>
+                    <div class="task-footer">
+                        {% if task.assigned_to %}
+                            <div class="avatar" title="{{ task.assigned_to.username }}">
+                                {{ task.assigned_to.username|first|upper }}
+                            </div>
+                        {% else %}
+                            <div class="avatar" style="background: #6c757d;" title="Sin asignar">
+                                —
+                            </div>
+                        {% endif %}
+                        <div class="task-actions">
+                            <a href="{% url 'task-update' task.pk %}" class="btn btn-sm btn-outline-warning" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'task-delete' task.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <div class="empty-column">
+                    <div class="empty-icon">✓</div>
+                    <p>No hay tareas en revisión</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- DONE Column -->
+    <div class="kanban-column">
+        <div class="kanban-header">
+            <h5>Completadas</h5>
+            <span class="task-count">{{ done_count }}</span>
+        </div>
+        <div class="tasks-list">
+            {% if done_tasks %}
+                {% for task in done_tasks %}
+                <a href="{% url 'task-detail' task.pk %}" class="task-card">
+                    <div class="task-title">{{ task.title }}</div>
+                    <div class="task-meta">
+                        <span class="task-team">{{ task.team.name }}</span>
+                        <span class="task-priority priority-{{ task.priority }}">
+                            {{ task.get_priority_display }}
+                        </span>
+                    </div>
+                    <div class="task-footer">
+                        {% if task.assigned_to %}
+                            <div class="avatar" title="{{ task.assigned_to.username }}">
+                                {{ task.assigned_to.username|first|upper }}
+                            </div>
+                        {% else %}
+                            <div class="avatar" style="background: #6c757d;" title="Sin asignar">
+                                —
+                            </div>
+                        {% endif %}
+                        <div class="task-actions">
+                            <a href="{% url 'task-update' task.pk %}" class="btn btn-sm btn-outline-warning" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'task-delete' task.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <div class="empty-column">
+                    <div class="empty-icon">✓</div>
+                    <p>No hay tareas completadas</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+{% endblock %}

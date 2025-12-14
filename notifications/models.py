@@ -1,0 +1,37 @@
+from django.db import models
+from django.conf import settings
+from tasks.models import Task
+
+class Notification(models.Model):
+    NOTIFICATION_TYPES = [
+        ('task_created', 'Task Created'),
+        ('task_due_24h', 'Task Due in 24 Hours'),
+        ('task_due_1h', 'Task Due in 1 Hour'),
+        ('task_overdue', 'Task Overdue'),
+    ]
+    
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications')
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, null=True, blank=True)
+    message = models.TextField()
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES, default='task_created')
+    is_read = models.BooleanField(default=False)
+    email_sent = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.notification_type} - {self.user.name}"
+
+
+class TaskNotificationTracker(models.Model):
+    """Rastrea qué notificaciones ya se enviaron para cada tarea"""
+    task = models.OneToOneField(Task, on_delete=models.CASCADE, related_name='notification_tracker')
+    created_notification_sent = models.BooleanField(default=False)
+    due_24h_notification_sent = models.BooleanField(default=False)
+    due_1h_notification_sent = models.BooleanField(default=False)
+    overdue_notification_sent = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"Tracker for Task: {self.task.title}"

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Tarea - Task System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-body">
+                <h2 class="card-title text-danger mb-4">Eliminar Tarea</h2>
+                
+                <div class="alert alert-warning">
+                    <p><strong>¿Estás seguro de que deseas eliminar esta tarea?</strong></p>
+                    <p><strong>{{ object.title }}</strong></p>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="btn-group" role="group">
+                        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                        <a href="{% url 'task-detail' object.pk %}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

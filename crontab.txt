@@ -1,0 +1,2 @@
+# Ejecutar notificaciones cada 10 minutos
+*/10 * * * * /code/check_notifications.sh >> /var/log/task_notifications.log 2>&1

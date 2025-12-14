@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ team.name }} - Task System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2>{{ team.name }}</h2>
+                <p>{{ team.description }}</p>
+                <p class="text-muted">Creado por: {{ team.created_by.name }}</p>
+                <p><strong>Líder del Equipo:</strong> 
+                    {% if team.team_lead %}
+                        {{ team.team_lead.name }}
+                    {% else %}
+                        Sin asignar
+                    {% endif %}
+                </p>
+                
+                {% if is_admin %}
+                <a href="{% url 'assign-team-lead' team.pk %}" class="btn btn-sm btn-primary">
+                    <i class="bi bi-person-badge"></i> Asignar/Cambiar Líder
+                </a>
+                <a href="{% url 'team-delete' team.pk %}" class="btn btn-sm btn-danger ms-2" 
+                   onclick="return confirm('¿Estás seguro de que deseas eliminar este equipo?')">
+                    <i class="bi bi-trash"></i> Eliminar Equipo
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <h3>Tareas del Equipo</h3>
+        {% if is_team_lead or is_admin %}
+        <a href="{% url 'task-create' %}" class="btn btn-success mb-3">
+            <i class="bi bi-plus-circle"></i> Nueva Tarea
+        </a>
+        {% endif %}
+        
+        {% if tasks %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Título</th>
+                        <th>Asignada a</th>
+                        <th>Estado</th>
+                        <th>Prioridad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <tr>
+                        <td><a href="{% url 'task-detail' task.pk %}">{{ task.title }}</a></td>
+                        <td>
+                            {% for user in task.assigned_to.all %}
+                                <span class="badge bg-info">{{ user.name }}</span>
+                            {% empty %}
+                                <span class="text-muted">No asignada</span>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <span class="badge 
+                                {% if task.status == 'to_do' %}bg-secondary
+                                {% elif task.status == 'in_progress' %}bg-primary
+                                {% elif task.status == 'review' %}bg-warning
+                                {% else %}bg-success{% endif %}">
+                                {{ task.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge 
+                                {% if task.priority == 'urgent' %}bg-danger
+                                {% elif task.priority == 'high' %}bg-warning
+                                {% elif task.priority == 'medium' %}bg-info
+                                {% else %}bg-secondary{% endif %}">
+                                {{ task.get_priority_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{% url 'task-detail' task.pk %}" class="btn btn-sm btn-info">Ver</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            No hay tareas en este equipo.
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Miembros del Equipo</h5>
+                
+                {% if is_team_lead or is_admin %}
+                <a href="{% url 'add-team-member' team.pk %}" class="btn btn-sm btn-success mb-2">
+                    <i class="bi bi-person-plus"></i> Agregar Miembro
+                </a>
+                {% endif %}
+                
+                {% if members %}
+                <ul class="list-group list-group-flush">
+                    {% for member in members %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-person-circle"></i> {{ member.name }}
+                            <small class="text-muted d-block">{{ member.get_role_display }}</small>
+                        </div>
+                        {% if is_team_lead or is_admin %}
+                            {% if member != team.team_lead %}
+                            <a href="{% url 'remove-team-member' team.pk member.id %}" 
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('¿Eliminar a {{ member.name }} del equipo?')">
+                                <i class="bi bi-x-circle"></i>
+                            </a>
+                            {% endif %}
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">Sin miembros</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="{% url 'team-list' %}" class="btn btn-secondary">Volver a Equipos</a>
+</div>
+{% endblock %}
