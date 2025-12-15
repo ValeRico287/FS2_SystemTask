@@ -18,7 +18,7 @@
                     {% csrf_token %}
                     <div class="btn-group" role="group">
                         <button type="submit" class="btn btn-danger">Sí, eliminar</button>
-                        <a href="{% url 'task-detail' object.pk %}" class="btn btn-secondary">Cancelar</a>
+                        <a href="{% url 'task-detail' object.uuid %}" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </form>
             </div>

@@ -50,7 +50,7 @@
     {% for task in tasks %}
     <div class="task-row">
         <div>
-            <a href="{% url 'task-detail' task.pk %}" style="text-decoration: none; color: inherit;">
+            <a href="{% url 'task-detail' task.uuid %}" style="text-decoration: none; color: inherit;">
                 <div class="task-title">{{ task.title }}</div>
             </a>
         </div>
@@ -75,13 +75,13 @@
             {% endif %}
         </div>
         <div class="task-actions">
-            <a href="{% url 'task-detail' task.pk %}" class="btn btn-sm btn-outline-primary" title="Ver">
+            <a href="{% url 'task-detail' task.uuid %}" class="btn btn-sm btn-outline-primary" title="Ver">
                 <i class="bi bi-eye"></i>
             </a>
-            <a href="{% url 'task-update' task.pk %}" class="btn btn-sm btn-outline-warning" title="Editar">
+            <a href="{% url 'task-update' task.uuid %}" class="btn btn-sm btn-outline-warning" title="Editar">
                 <i class="bi bi-pencil"></i>
             </a>
-            <a href="{% url 'task-delete' task.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar">
+            <a href="{% url 'task-delete' task.uuid %}" class="btn btn-sm btn-outline-danger" title="Eliminar">
                 <i class="bi bi-trash"></i>
             </a>
         </div>

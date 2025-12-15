@@ -49,11 +49,41 @@ html, body {
 
 .navbar-brand {
   font-weight: 700;
+  color: #667eea;
   background: var(--primary-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-size: 1.5rem;
+}
+
+.navbar .nav-link {
+  color: #2d3748 !important;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 8px 16px !important;
+  border-radius: 8px;
+}
+
+.navbar .nav-link:hover {
+  background: linear-gradient(135deg, #667eea15 0%, #764ba230 100%);
+  color: #667eea !important;
+  transform: translateY(-2px);
+}
+
+.navbar .nav-link i {
+  margin-right: 5px;
+}
+
+.navbar .dropdown-toggle {
+  color: #2d3748 !important;
+  font-weight: 600;
+}
+
+.navbar .dropdown-menu {
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border: none;
 }
 
 /* Cards mejoradas */
@@ -95,6 +125,61 @@ html, body {
   padding-right: 8px;
 }
 
+/* Dashboard Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px 0;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-title i {
+  color: white;
+  font-size: 1.8rem;
+}
+
+.btn-new-task {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 14px 28px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-new-task:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+  color: white;
+}
+
+.btn-new-task i {
+  font-size: 1.2rem;
+}
+
+.btn-new-task span {
+  letter-spacing: 0.5px;
+}
+
 /* Stats mejorados con degradados */
 .stats-container {
   display: grid;
@@ -104,52 +189,133 @@ html, body {
 }
 
 .stat-card {
-  background: var(--bg-card);
-  border-radius: 16px;
-  padding: 24px;
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
   text-align: center;
-  box-shadow: var(--shadow-md);
-  transition: all 0.3s ease;
-  border-top: 4px solid transparent;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
 }
 
-.stat-card:nth-child(1) {
-  border-top: 4px solid var(--status-todo);
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--primary-gradient);
+  transition: height 0.3s ease;
 }
 
-.stat-card:nth-child(2) {
-  border-top: 4px solid var(--status-in_progress);
+.stat-card:nth-child(1)::before {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.stat-card:nth-child(3) {
-  border-top: 4px solid var(--status-review);
+.stat-card:nth-child(2)::before {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
 
-.stat-card:nth-child(4) {
-  border-top: 4px solid var(--status-done);
+.stat-card:nth-child(3)::before {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.stat-card:nth-child(4)::before {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
 }
 
 .stat-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.stat-card:hover::before {
+  height: 100%;
+  opacity: 0.1;
 }
 
 .stat-number {
-  font-size: 2.5rem;
-  font-weight: 700;
-  background: var(--primary-gradient);
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+  line-height: 1;
+}
+
+.stat-card:nth-child(1) .stat-number {
+  color: #667eea;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 8px;
+}
+
+.stat-card:nth-child(2) .stat-number {
+  color: #4facfe;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card:nth-child(3) .stat-number {
+  color: #f093fb;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card:nth-child(4) .stat-number {
+  color: #11998e;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .stat-label {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+.stat-card:nth-child(1) .stat-label {
+  color: #667eea;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card:nth-child(2) .stat-label {
+  color: #4facfe;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card:nth-child(3) .stat-label {
+  color: #f093fb;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card:nth-child(4) .stat-label {
+  color: #11998e;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Kanban board mejorado */
@@ -161,143 +327,257 @@ html, body {
 }
 
 .kanban-column {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(10px);
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 20px;
   min-height: 600px;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .kanban-column:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
 }
 
 .kanban-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid var(--border-soft);
+  margin: -20px -20px 20px -20px;
+  padding: 20px;
+  border-radius: 16px 16px 0 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.kanban-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.kanban-column:nth-child(1) .kanban-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.kanban-column:nth-child(2) .kanban-header {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.kanban-column:nth-child(3) .kanban-header {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.kanban-column:nth-child(4) .kanban-header {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
 }
 
 .kanban-header h5 {
   margin: 0;
   font-weight: 700;
-  color: var(--text-primary);
-  font-size: 1.1rem;
+  color: white;
+  font-size: 1.15rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.5px;
 }
 
 .task-count {
-  background: var(--primary-gradient);
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
   color: white;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  box-shadow: var(--shadow-sm);
+  padding: 6px 16px;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+  min-width: 35px;
+  text-align: center;
+  border: 2px solid rgba(255, 255, 255, 0.4);
 }
 
 /* Task cards mejoradas */
 .task-card {
   background: white;
   border: none;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
-  text-decoration: none;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 14px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   color: inherit;
   display: block;
-  border-left: 4px solid transparent;
+  border-left: 5px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.task-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  transition: width 0.3s ease;
 }
 
 .task-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.task-card:hover::before {
+  width: 100%;
+  opacity: 0.05;
+}
+
+.task-title-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.task-title-link::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.task-title-link:hover .task-title {
+  color: #667eea;
+  transform: translateX(4px);
 }
 
 .task-card-todo,
 .kanban-column:nth-child(1) .task-card {
-  border-left-color: var(--status-todo);
+  border-left-color: #667eea;
+}
+
+.kanban-column:nth-child(1) .task-card::before {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .task-card-in_progress,
 .kanban-column:nth-child(2) .task-card {
-  border-left-color: var(--status-in_progress);
+  border-left-color: #4facfe;
+}
+
+.kanban-column:nth-child(2) .task-card::before {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
 
 .task-card-review,
 .kanban-column:nth-child(3) .task-card {
-  border-left-color: var(--status-review);
+  border-left-color: #f093fb;
+}
+
+.kanban-column:nth-child(3) .task-card::before {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 }
 
 .task-card-done,
 .kanban-column:nth-child(4) .task-card {
-  border-left-color: var(--status-done);
+  border-left-color: #11998e;
+}
+
+.kanban-column:nth-child(4) .task-card::before {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
 }
 
 .task-title {
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: var(--text-primary);
-  line-height: 1.4;
-  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #2d3748;
+  line-height: 1.5;
+  font-size: 1rem;
+  transition: all 0.2s ease;
 }
 
 .task-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
-  margin-bottom: 12px;
-  color: #6c757d;
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+  gap: 10px;
 }
 
 .task-team {
-  background: linear-gradient(135deg, #e7f3ff 0%, #d0e7ff 100%);
-  color: #0056b3;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba230 100%);
+  color: #667eea;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid #667eea40;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  letter-spacing: 0.3px;
 }
 
 .task-priority {
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
   color: white;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .priority-urgent {
   background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  box-shadow: 0 4px 15px rgba(250, 112, 154, 0.4);
 }
 
 .priority-high {
   background: linear-gradient(135deg, #fd7e14 0%, #ff9966 100%);
+  box-shadow: 0 4px 15px rgba(253, 126, 20, 0.4);
 }
 
 .priority-medium {
   background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
 }
 
 .priority-low {
   background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  box-shadow: 0 4px 15px rgba(17, 153, 142, 0.4);
 }
 
 .task-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  padding-top: 12px;
-  border-top: 1px solid var(--border-soft);
+  padding-top: 14px;
+  margin-top: 6px;
+  border-top: 2px solid #f0f0f0;
+  position: relative;
+  z-index: 10;
 }
 
 .avatar {
@@ -323,18 +603,57 @@ html, body {
 
 .task-actions {
   display: flex;
-  gap: 6px;
+  gap: 8px;
+  position: relative;
+  z-index: 10;
 }
 
 .task-actions a {
-  padding: 4px 8px;
-  font-size: 0.75rem;
-  border-radius: 6px;
-  transition: all 0.3s ease;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: 600;
+  border: 2px solid;
+  min-width: 40px;
+  position: relative;
+  z-index: 10;
 }
 
-.task-actions a:hover {
-  transform: scale(1.05);
+.task-actions .btn-outline-warning {
+  background: linear-gradient(135deg, #fff9e6 0%, #fff3cc 100%);
+  color: #ff9800;
+  border-color: #ffb84d;
+}
+
+.task-actions .btn-outline-warning:hover {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+  border-color: #ff9800;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+}
+
+.task-actions .btn-outline-danger {
+  background: linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%);
+  color: #f44336;
+  border-color: #ff6b6b;
+}
+
+.task-actions .btn-outline-danger:hover {
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+  color: white;
+  border-color: #f44336;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+}
+
+.task-actions a i {
+  font-size: 1rem;
 }
 
 /* Botones mejorados */

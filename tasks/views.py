@@ -123,6 +123,8 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
     model = Task
     template_name = 'tasks/task_detail.html'
     context_object_name = 'task'
+    slug_field = 'uuid'
+    slug_url_kwarg = 'uuid'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -140,6 +142,8 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'tasks/task_form.html'
     fields = ['title', 'description', 'team', 'priority', 'due_date', 'status']
     success_url = reverse_lazy('dashboard')
+    slug_field = 'uuid'
+    slug_url_kwarg = 'uuid'
     
     def dispatch(self, request, *args, **kwargs):
         task = self.get_object()
@@ -175,6 +179,8 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
     model = Task
     template_name = 'tasks/task_confirm_delete.html'
     success_url = reverse_lazy('dashboard')
+    slug_field = 'uuid'
+    slug_url_kwarg = 'uuid'
     
     def dispatch(self, request, *args, **kwargs):
         task = self.get_object()
@@ -185,7 +191,7 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         else:
             messages.error(request, 'No tienes permisos para eliminar esta tarea.')
-            return redirect('task-detail', pk=task.pk)
+            return redirect('task-detail', uuid=task.uuid)
 
 
 class MyTasksView(LoginRequiredMixin, ListView):
@@ -214,9 +220,9 @@ class MyTasksView(LoginRequiredMixin, ListView):
 
 
 @user_required
-def update_task_status(request, pk):
+def update_task_status(request, uuid):
     """Vista para que usuarios cambien el estado de sus tareas asignadas"""
-    task = get_object_or_404(Task, pk=pk)
+    task = get_object_or_404(Task, uuid=uuid)
     
     # Verificar que el usuario esté asignado a la tarea
     if not task.assigned_to.filter(id=request.user.id).exists():
@@ -232,7 +238,7 @@ def update_task_status(request, pk):
         else:
             messages.error(request, 'Estado inválido.')
         
-        return redirect('task-detail', pk=pk)
+        return redirect('task-detail', uuid=uuid)
     
     return render(request, 'tasks/update_status.html', {
         'task': task,

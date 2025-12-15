@@ -51,16 +51,16 @@
 
                 <div class="btn-group" role="group">
                     {% if can_change_status %}
-                    <a href="{% url 'update-task-status' task.pk %}" class="btn btn-primary">
+                    <a href="{% url 'update-task-status' task.uuid %}" class="btn btn-primary">
                         <i class="bi bi-pencil-square"></i> Cambiar Estado
                     </a>
                     {% endif %}
                     
                     {% if can_edit %}
-                    <a href="{% url 'task-update' task.pk %}" class="btn btn-warning">
+                    <a href="{% url 'task-update' task.uuid %}" class="btn btn-warning">
                         <i class="bi bi-pencil"></i> Editar
                     </a>
-                    <a href="{% url 'task-delete' task.pk %}" class="btn btn-danger">
+                    <a href="{% url 'task-delete' task.uuid %}" class="btn btn-danger">
                         <i class="bi bi-trash"></i> Eliminar
                     </a>
                     {% endif %}
